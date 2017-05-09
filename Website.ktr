@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Email2</name>
+    <name>Website</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,12 +130,11 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Map Location Type</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
   <hop> <from>Find new Contact ID</from><to>Filter new contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Get Source Email</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Map Location Type</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Error Email</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Migrate email</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Website</from><to>Add constants</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter new contacts</from><to>Error Website</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter new contacts</from><to>Migrate website</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add constants</name>
@@ -171,7 +170,7 @@
     </step>
 
   <step>
-    <name>Error Email</name>
+    <name>Error Website</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -183,7 +182,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>email_migration_error</table>
+    <table>website_migration_error</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -200,7 +199,7 @@
     <return_field/>
     <fields>
         <field>
-          <column_name>source_email_id</column_name>
+          <column_name>source_website_id</column_name>
           <stream_name>id</stream_name>
         </field>
         <field>
@@ -214,7 +213,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
+      <xloc>544</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
       </GUI>
@@ -231,8 +230,8 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Error Email</send_true_to>
-<send_false_to>Migrate email</send_false_to>
+<send_true_to>Error Website</send_true_to>
+<send_false_to>Migrate website</send_false_to>
     <compare>
 <condition>
  <negated>N</negated>
@@ -243,7 +242,7 @@
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
+      <xloc>544</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>
@@ -285,14 +284,14 @@
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>576</xloc>
+      <xloc>400</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Get Source Email</name>
+    <name>Get Source Website</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -303,7 +302,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT em.&#x2a; &#xa;FROM civicrm_email em&#xa;JOIN civicrm_contact cc ON em.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
+    <sql>SELECT cw.&#x2a; &#xa;FROM civicrm_website cw&#xa;JOIN civicrm_contact cc ON cw.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -318,59 +317,7 @@
     </step>
 
   <step>
-    <name>Map Location Type</name>
-    <type>ValueMapper</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <field_to_use>location_type_id</field_to_use>
-    <target_field/>
-    <non_match_default>1</non_match_default>
-    <fields>
-      <field>
-        <source_value>1</source_value>
-        <target_value>1</target_value>
-      </field>
-      <field>
-        <source_value>4</source_value>
-        <target_value>4</target_value>
-      </field>
-      <field>
-        <source_value>5</source_value>
-        <target_value>2</target_value>
-      </field>
-      <field>
-        <source_value>6</source_value>
-        <target_value>6</target_value>
-      </field>
-      <field>
-        <source_value>7</source_value>
-        <target_value>5</target_value>
-      </field>
-      <field>
-        <source_value>8</source_value>
-        <target_value>7</target_value>
-      </field>
-      <field>
-        <source_value>9</source_value>
-        <target_value>8</target_value>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>400</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Migrate email</name>
+    <name>Migrate website</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -382,7 +329,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_email</table>
+    <table>forumzfd_website</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -407,49 +354,17 @@
           <stream_name>new_contact_id</stream_name>
         </field>
         <field>
-          <column_name>location_type_id</column_name>
-          <stream_name>location_type_id</stream_name>
+          <column_name>url</column_name>
+          <stream_name>url</stream_name>
         </field>
         <field>
-          <column_name>email</column_name>
-          <stream_name>email</stream_name>
-        </field>
-        <field>
-          <column_name>is_primary</column_name>
-          <stream_name>is_primary</stream_name>
-        </field>
-        <field>
-          <column_name>is_billing</column_name>
-          <stream_name>is_billing</stream_name>
-        </field>
-        <field>
-          <column_name>on_hold</column_name>
-          <stream_name>on_hold</stream_name>
-        </field>
-        <field>
-          <column_name>is_bulkmail</column_name>
-          <stream_name>is_bulkmail</stream_name>
-        </field>
-        <field>
-          <column_name>hold_date</column_name>
-          <stream_name>hold_date</stream_name>
-        </field>
-        <field>
-          <column_name>reset_date</column_name>
-          <stream_name>reset_date</stream_name>
-        </field>
-        <field>
-          <column_name>signature_text</column_name>
-          <stream_name>signature_text</stream_name>
-        </field>
-        <field>
-          <column_name>signature_html</column_name>
-          <stream_name>signature_html</stream_name>
+          <column_name>website_type_id</column_name>
+          <stream_name>website_type_id</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>880</xloc>
+      <xloc>704</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>

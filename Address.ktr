@@ -6,6 +6,7 @@
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
     <directory>&#x2f;</directory>
     <parameters>
     </parameters>
@@ -131,11 +132,123 @@
   <order>
   <hop> <from>Map Location Type</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
   <hop> <from>Find new Contact ID</from><to>Filter new contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Get Source Email</from><to>Add constants</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Address</from><to>Add constants</to><enabled>Y</enabled> </hop>
   <hop> <from>Add constants</from><to>Map Location Type</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Error Email</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Migrate email</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter new contacts</from><to>Error Address</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter new contacts</from><to>Migrate address</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>Add constants</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>error_message</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>No new contact found</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>240</xloc>
+      <yloc>48</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Error Address</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ForumZFD Target</connection>
+    <schema/>
+    <table>address_migration_error</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>source_address_id</column_name>
+          <stream_name>id</stream_name>
+        </field>
+        <field>
+          <column_name>source_contact_id</column_name>
+          <stream_name>contact_id</stream_name>
+        </field>
+        <field>
+          <column_name>error_message</column_name>
+          <stream_name>error_message</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>720</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Filter new contacts</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>Error Address</send_true_to>
+<send_false_to>Migrate address</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>new_contact_id</leftvalue>
+ <function>&#x3d;</function>
+ <rightvalue/>
+ <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>720</xloc>
+      <yloc>48</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Find new Contact ID</name>
     <type>DBLookup</type>
@@ -179,7 +292,7 @@
     </step>
 
   <step>
-    <name>Get Source Email</name>
+    <name>Get Source Address</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -190,7 +303,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT em.&#x2a; &#xa;FROM civicrm_email em&#xa;JOIN civicrm_contact cc ON em.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
+    <sql>SELECT adr.&#x2a; &#xa;FROM civicrm_address adr&#xa;JOIN civicrm_contact cc ON adr.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -257,36 +370,7 @@
     </step>
 
   <step>
-    <name>Filter new contacts</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Error Email</send_true_to>
-<send_false_to>Migrate email</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_contact_id</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error Email</name>
+    <name>Migrate address</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -298,90 +382,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>email_migration_error</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_email_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_contact_id</column_name>
-          <stream_name>contact_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>error_message</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>error_message</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>No new contact found</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>240</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Migrate email</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>forumzfd_email</table>
+    <table>forumzfd_address</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -410,10 +411,6 @@
           <stream_name>location_type_id</stream_name>
         </field>
         <field>
-          <column_name>email</column_name>
-          <stream_name>email</stream_name>
-        </field>
-        <field>
           <column_name>is_primary</column_name>
           <stream_name>is_primary</stream_name>
         </field>
@@ -422,28 +419,100 @@
           <stream_name>is_billing</stream_name>
         </field>
         <field>
-          <column_name>on_hold</column_name>
-          <stream_name>on_hold</stream_name>
+          <column_name>street_address</column_name>
+          <stream_name>street_address</stream_name>
         </field>
         <field>
-          <column_name>is_bulkmail</column_name>
-          <stream_name>is_bulkmail</stream_name>
+          <column_name>street_number</column_name>
+          <stream_name>street_number</stream_name>
         </field>
         <field>
-          <column_name>hold_date</column_name>
-          <stream_name>hold_date</stream_name>
+          <column_name>street_number_suffix</column_name>
+          <stream_name>street_number_suffix</stream_name>
         </field>
         <field>
-          <column_name>reset_date</column_name>
-          <stream_name>reset_date</stream_name>
+          <column_name>street_number_predirectional</column_name>
+          <stream_name>street_number_predirectional</stream_name>
         </field>
         <field>
-          <column_name>signature_text</column_name>
-          <stream_name>signature_text</stream_name>
+          <column_name>street_name</column_name>
+          <stream_name>street_name</stream_name>
         </field>
         <field>
-          <column_name>signature_html</column_name>
-          <stream_name>signature_html</stream_name>
+          <column_name>street_type</column_name>
+          <stream_name>street_type</stream_name>
+        </field>
+        <field>
+          <column_name>street_number_postdirectional</column_name>
+          <stream_name>street_number_postdirectional</stream_name>
+        </field>
+        <field>
+          <column_name>street_unit</column_name>
+          <stream_name>street_unit</stream_name>
+        </field>
+        <field>
+          <column_name>supplemental_address_1</column_name>
+          <stream_name>supplemental_address_1</stream_name>
+        </field>
+        <field>
+          <column_name>supplemental_address_2</column_name>
+          <stream_name>supplemental_address_2</stream_name>
+        </field>
+        <field>
+          <column_name>supplemental_address_3</column_name>
+          <stream_name>supplemental_address_3</stream_name>
+        </field>
+        <field>
+          <column_name>city</column_name>
+          <stream_name>city</stream_name>
+        </field>
+        <field>
+          <column_name>county_id</column_name>
+          <stream_name>county_id</stream_name>
+        </field>
+        <field>
+          <column_name>state_province_id</column_name>
+          <stream_name>state_province_id</stream_name>
+        </field>
+        <field>
+          <column_name>postal_code_suffix</column_name>
+          <stream_name>postal_code_suffix</stream_name>
+        </field>
+        <field>
+          <column_name>postal_code</column_name>
+          <stream_name>postal_code</stream_name>
+        </field>
+        <field>
+          <column_name>usps_adc</column_name>
+          <stream_name>usps_adc</stream_name>
+        </field>
+        <field>
+          <column_name>country_id</column_name>
+          <stream_name>country_id</stream_name>
+        </field>
+        <field>
+          <column_name>geo_code_1</column_name>
+          <stream_name>geo_code_1</stream_name>
+        </field>
+        <field>
+          <column_name>geo_code_2</column_name>
+          <stream_name>geo_code_2</stream_name>
+        </field>
+        <field>
+          <column_name>timezone</column_name>
+          <stream_name>timezone</stream_name>
+        </field>
+        <field>
+          <column_name>name</column_name>
+          <stream_name>name</stream_name>
+        </field>
+        <field>
+          <column_name>master_id</column_name>
+          <stream_name>master_id</stream_name>
+        </field>
+        <field>
+          <column_name>manual_geo_code</column_name>
+          <stream_name>manual_geo_code</stream_name>
         </field>
     </fields>
      <cluster_schema/>
