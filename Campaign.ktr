@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Note</name>
+    <name>Campaign</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,168 +130,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Source Note</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Error Note</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Migrate Note</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Contact ID</from><to>Filter new contacts</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Campaign</from><to>Migrate campaign</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>error_message</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>No new contact found</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error Note</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>note_migration_error</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_note_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_contact_id</column_name>
-          <stream_name>contact_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>error_message</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>128</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter new contacts</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Error Note</send_true_to>
-<send_false_to>Migrate Note</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_contact_id</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Contact ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>contact_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_contact_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Source Note</name>
+    <name>Get Source Campaign</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -302,7 +144,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT n.&#x2a;&#xa;FROM civicrm_note n&#xa;LEFT JOIN civicrm_contact cc ON n.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND n.note IS NOT NULL</sql>
+    <sql>SELECT &#x2a; FROM civicrm_campaign</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -311,13 +153,13 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>80</xloc>
-      <yloc>32</yloc>
+      <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Migrate Note</name>
+    <name>Migrate campaign</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -329,7 +171,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_note</table>
+    <table>forumzfd_campaign</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -350,38 +192,74 @@
           <stream_name>id</stream_name>
         </field>
         <field>
-          <column_name>entity_table</column_name>
-          <stream_name>entity_table</stream_name>
+          <column_name>name</column_name>
+          <stream_name>name</stream_name>
         </field>
         <field>
-          <column_name>entity_id</column_name>
-          <stream_name>entity_id</stream_name>
+          <column_name>title</column_name>
+          <stream_name>title</stream_name>
         </field>
         <field>
-          <column_name>note</column_name>
-          <stream_name>note</stream_name>
+          <column_name>description</column_name>
+          <stream_name>description</stream_name>
         </field>
         <field>
-          <column_name>contact_id</column_name>
-          <stream_name>new_contact_id</stream_name>
+          <column_name>start_date</column_name>
+          <stream_name>start_date</stream_name>
         </field>
         <field>
-          <column_name>modified_date</column_name>
-          <stream_name>modified_date</stream_name>
+          <column_name>end_date</column_name>
+          <stream_name>end_date</stream_name>
         </field>
         <field>
-          <column_name>subject</column_name>
-          <stream_name>subject</stream_name>
+          <column_name>campaign_type_id</column_name>
+          <stream_name>campaign_type_id</stream_name>
         </field>
         <field>
-          <column_name>privacy</column_name>
-          <stream_name>privacy</stream_name>
+          <column_name>status_id</column_name>
+          <stream_name>status_id</stream_name>
+        </field>
+        <field>
+          <column_name>external_identifier</column_name>
+          <stream_name>external_identifier</stream_name>
+        </field>
+        <field>
+          <column_name>parent_id</column_name>
+          <stream_name>parent_id</stream_name>
+        </field>
+        <field>
+          <column_name>is_active</column_name>
+          <stream_name>is_active</stream_name>
+        </field>
+        <field>
+          <column_name>created_id</column_name>
+          <stream_name>created_id</stream_name>
+        </field>
+        <field>
+          <column_name>created_date</column_name>
+          <stream_name>created_date</stream_name>
+        </field>
+        <field>
+          <column_name>last_modified_id</column_name>
+          <stream_name>last_modified_id</stream_name>
+        </field>
+        <field>
+          <column_name>last_modified_date</column_name>
+          <stream_name>last_modified_date</stream_name>
+        </field>
+        <field>
+          <column_name>goal_general</column_name>
+          <stream_name>goal_general</stream_name>
+        </field>
+        <field>
+          <column_name>goal_revenue</column_name>
+          <stream_name>goal_revenue</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>32</yloc>
+      <xloc>272</xloc>
+      <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

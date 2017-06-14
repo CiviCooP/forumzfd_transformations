@@ -302,7 +302,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT cw.&#x2a; &#xa;FROM civicrm_website cw&#xa;JOIN civicrm_contact cc ON cw.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
+    <sql>SELECT cw.&#x2a; &#xa;FROM civicrm_website cw&#xa;JOIN civicrm_contact cc ON cw.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND cw.url IS NOT NULL&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
