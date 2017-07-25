@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>EntityTag</name>
+    <name>ValueZusatzinfosSeminarAnmeldung45</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,211 +130,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Source EntityTag</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Tag</from><to>Filter new tag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new tag</from><to>Error Entity Tag No Tag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new tag</from><to>Migrate EntityTag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Contact ID</from><to>Find new Tag</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Fields</from><to>Write</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>no_tag</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>No new tag found</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error Entity Tag No Tag</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>entity_tag_migration_error</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_entity_tag_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_contact_id</column_name>
-          <stream_name>entity_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>no_tag</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter new tag</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Error Entity Tag No Tag</send_true_to>
-<send_false_to>Migrate EntityTag</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_tag_id</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Contact ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>entity_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_contact_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Tag</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_tag</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>name</name>
-        <field>name</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>id</name>
-        <rename>new_tag_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>512</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Source EntityTag</name>
+    <name>Get Source Fields</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -345,7 +144,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT et.&#x2a;, tag.name&#xa;FROM civicrm_entity_tag et&#xa;LEFT JOIN civicrm_tag tag ON et.tag_id &#x3d; tag.id&#xa;LEFT JOIN civicrm_contact cc ON et.entity_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND et.entity_table &#x3d; &#x27;civicrm_contact&#x27;</sql>
+    <sql>SELECT&#xa;  id&#xa;, entity_id&#xa;, erfahrung_330&#xa;, erwartungen_331&#xa;, von_organisation_entsendet_332&#xa;, entsendeorganisation_konsortium_333&#xa;, entsendeorganisation_334&#xa;, einsatzland_335&#xa;, position_projekt_336&#xa;, lokaler_internationaler_ma_337&#xa;, unterkunft_benoetigt_338&#xa;, erste_mahlzeit_anreisetag_339&#xa;, letzte_mahlzeit_abreisetag_340&#xa;, ankunftszeit_alt_341&#xa;, ankunftszeit_342&#xa;, besondere_wuensche_343&#xa;, agb_akzeptiert_344&#xa;, sonstige_bemerkungen_345&#xa;, woher_kennen_sie_die_akademie_346&#xa;, zahlungeingang_347&#xa;, abreisedatum_453&#xa;, bezuschussung_beantragt_467&#xa;FROM civicrm_value_zusatzinfos_seminaranmeldung_45&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -354,13 +153,13 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>80</xloc>
-      <yloc>48</yloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Migrate EntityTag</name>
+    <name>Write</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -372,7 +171,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_entity_tag</table>
+    <table>forumzfd_value_zusatzinfos_seminaranmeldung_45</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -393,22 +192,94 @@
           <stream_name>id</stream_name>
         </field>
         <field>
-          <column_name>entity_table</column_name>
-          <stream_name>entity_table</stream_name>
-        </field>
-        <field>
           <column_name>entity_id</column_name>
           <stream_name>entity_id</stream_name>
         </field>
         <field>
-          <column_name>tag_id</column_name>
-          <stream_name>new_tag_id</stream_name>
+          <column_name>erfahrung_330</column_name>
+          <stream_name>erfahrung_330</stream_name>
+        </field>
+        <field>
+          <column_name>erwartungen_331</column_name>
+          <stream_name>erwartungen_331</stream_name>
+        </field>
+        <field>
+          <column_name>von_organisation_entsendet_332</column_name>
+          <stream_name>von_organisation_entsendet_332</stream_name>
+        </field>
+        <field>
+          <column_name>entsendeorganisation_konsortium_333</column_name>
+          <stream_name>entsendeorganisation_konsortium_333</stream_name>
+        </field>
+        <field>
+          <column_name>entsendeorganisation_334</column_name>
+          <stream_name>entsendeorganisation_334</stream_name>
+        </field>
+        <field>
+          <column_name>einsatzland_335</column_name>
+          <stream_name>einsatzland_335</stream_name>
+        </field>
+        <field>
+          <column_name>position_projekt_336</column_name>
+          <stream_name>position_projekt_336</stream_name>
+        </field>
+        <field>
+          <column_name>lokaler_internationaler_ma_337</column_name>
+          <stream_name>lokaler_internationaler_ma_337</stream_name>
+        </field>
+        <field>
+          <column_name>unterkunft_benoetigt_338</column_name>
+          <stream_name>unterkunft_benoetigt_338</stream_name>
+        </field>
+        <field>
+          <column_name>erste_mahlzeit_anreisetag_339</column_name>
+          <stream_name>erste_mahlzeit_anreisetag_339</stream_name>
+        </field>
+        <field>
+          <column_name>letzte_mahlzeit_abreisetag_340</column_name>
+          <stream_name>letzte_mahlzeit_abreisetag_340</stream_name>
+        </field>
+        <field>
+          <column_name>ankunftszeit_alt_341</column_name>
+          <stream_name>ankunftszeit_alt_341</stream_name>
+        </field>
+        <field>
+          <column_name>ankunftszeit_342</column_name>
+          <stream_name>ankunftszeit_342</stream_name>
+        </field>
+        <field>
+          <column_name>besondere_wuensche_343</column_name>
+          <stream_name>besondere_wuensche_343</stream_name>
+        </field>
+        <field>
+          <column_name>agb_akzeptiert_344</column_name>
+          <stream_name>agb_akzeptiert_344</stream_name>
+        </field>
+        <field>
+          <column_name>sonstige_bemerkungen_345</column_name>
+          <stream_name>sonstige_bemerkungen_345</stream_name>
+        </field>
+        <field>
+          <column_name>woher_kennen_sie_die_akademie_346</column_name>
+          <stream_name>woher_kennen_sie_die_akademie_346</stream_name>
+        </field>
+        <field>
+          <column_name>zahlungeingang_347</column_name>
+          <stream_name>zahlungeingang_347</stream_name>
+        </field>
+        <field>
+          <column_name>abreisedatum_453</column_name>
+          <stream_name>abreisedatum_453</stream_name>
+        </field>
+        <field>
+          <column_name>bezuschussung_beantragt_467</column_name>
+          <stream_name>bezuschussung_beantragt_467</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>816</xloc>
-      <yloc>48</yloc>
+      <xloc>288</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

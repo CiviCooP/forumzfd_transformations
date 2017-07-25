@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>EntityTag</name>
+    <name>ValueZusatzinfosWeiterbildungVollzeit47</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,211 +130,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Source EntityTag</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Tag</from><to>Filter new tag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new tag</from><to>Error Entity Tag No Tag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new tag</from><to>Migrate EntityTag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Contact ID</from><to>Find new Tag</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Fields</from><to>Write</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>no_tag</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>No new tag found</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error Entity Tag No Tag</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>entity_tag_migration_error</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_entity_tag_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_contact_id</column_name>
-          <stream_name>entity_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>no_tag</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter new tag</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Error Entity Tag No Tag</send_true_to>
-<send_false_to>Migrate EntityTag</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_tag_id</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Contact ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>entity_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_contact_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Tag</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_tag</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>name</name>
-        <field>name</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>id</name>
-        <rename>new_tag_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>512</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Source EntityTag</name>
+    <name>Get Source Fields</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -345,7 +144,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT et.&#x2a;, tag.name&#xa;FROM civicrm_entity_tag et&#xa;LEFT JOIN civicrm_tag tag ON et.tag_id &#x3d; tag.id&#xa;LEFT JOIN civicrm_contact cc ON et.entity_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND et.entity_table &#x3d; &#x27;civicrm_contact&#x27;</sql>
+    <sql>SELECT&#xa;  id&#xa;, entity_id&#xa;, hoechster_abschluss_368&#xa;, ausbildung_1_369&#xa;, zeit_ort_ausbildung_1_370&#xa;, einrichtung_abschluss_1_371&#xa;, ausbildung_2_372&#xa;, zeit_ort_ausbildung_2_373&#xa;, einrichtung_abschluss_2_374&#xa;, ausbildung_3_375&#xa;, zeit_ort_ausbildung_3_376&#xa;, einrichtung_abschluss_3_377&#xa;, weitere_erfahrungen_378&#xa;, erlernter_beruf_379&#xa;, aktueller_arbeitgeber_380&#xa;, aufgabenbereich_381&#xa;, berufserfahrung_1_382&#xa;, zeit_ort_berufserfahrung_1_383&#xa;, beschreibung_berufserfahrung_1_384&#xa;, berufserfahrung_2_385&#xa;, zeit_ort_berufserfahrung_2_386&#xa;, beschreibung_berufserfahrung_2_387&#xa;, berufserfahrung_3_388&#xa;, zeit_ort_berufserfahrung_3_389&#xa;, beschreibung_berufserfahrung_3_390&#xa;, ehrenamt_1_391&#xa;, zeit_ort_ehrenamt_1_392&#xa;, beschreibung_ehrenamt_1_393&#xa;, ehrenamt_2_394&#xa;, zeit_ort_ehrenamt_2_395&#xa;, beschreibung_ehrenamt_2_396&#xa;, ehrenamt_3_397&#xa;, zeit_ort_ehrenamt_3_398&#xa;, beschreibung_ehrenamt_3_399&#xa;, erfahrungen_inwiefern_relevant_400&#xa;, dauer_arbeit_krisengebiete_401&#xa;, muttersprache_402&#xa;, zweite_muttersprache_403&#xa;, erste_fremdsprache_404&#xa;, erste_fremdsprache_sprachlevel_s_405&#xa;, erste_fremdsprache_sprachlevel_m_406&#xa;, zweite_fremdsprache_407&#xa;, zweite_fremdsprache_sprachlevel__408&#xa;, zweite_fremdsprache_sprachlevel__409&#xa;, dritte_fremdsprache_410&#xa;, dritte_fremdsprache_sprachlevel__411&#xa;, dritte_fremdsprache_sprachlevel__412&#xa;, vierte_fremdsprache_413&#xa;, vierte_fremdsprache_sprachlevel__414&#xa;, vierte_fremdsprache_sprachlevel__415&#xa;, bewerbung_nur_grundlagenkurs_416&#xa;, motivation_417&#xa;, andere_auslandsaufenthalte_418&#xa;, im_auftrag_von_organisation_419&#xa;, welche_organisation_420&#xa;, andere_erfahrungen_421&#xa;, teilnahme_orientierungstag_422&#xa;, welcher_orientierungstag_423&#xa;, kursfinanzierung_424&#xa;, berufsperspektiven_425&#xa;, sonstige_bemerkungen_426&#xa;, wie_von_angebot_erfahren_427&#xa;, familienstand_428&#xa;, zahl_kinder_429&#xa;FROM civicrm_value_zusatzinfos_weiterbildung_vollzeit_47&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -354,13 +153,13 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>80</xloc>
-      <yloc>48</yloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Migrate EntityTag</name>
+    <name>Write</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -372,7 +171,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_entity_tag</table>
+    <table>forumzfd_value_zusatzinfos_weiterbildung_vollzeit_47</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -393,22 +192,262 @@
           <stream_name>id</stream_name>
         </field>
         <field>
-          <column_name>entity_table</column_name>
-          <stream_name>entity_table</stream_name>
-        </field>
-        <field>
           <column_name>entity_id</column_name>
           <stream_name>entity_id</stream_name>
         </field>
         <field>
-          <column_name>tag_id</column_name>
-          <stream_name>new_tag_id</stream_name>
+          <column_name>hoechster_abschluss_368</column_name>
+          <stream_name>hoechster_abschluss_368</stream_name>
+        </field>
+        <field>
+          <column_name>ausbildung_1_369</column_name>
+          <stream_name>ausbildung_1_369</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_ausbildung_1_370</column_name>
+          <stream_name>zeit_ort_ausbildung_1_370</stream_name>
+        </field>
+        <field>
+          <column_name>einrichtung_abschluss_1_371</column_name>
+          <stream_name>einrichtung_abschluss_1_371</stream_name>
+        </field>
+        <field>
+          <column_name>ausbildung_2_372</column_name>
+          <stream_name>ausbildung_2_372</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_ausbildung_2_373</column_name>
+          <stream_name>zeit_ort_ausbildung_2_373</stream_name>
+        </field>
+        <field>
+          <column_name>einrichtung_abschluss_2_374</column_name>
+          <stream_name>einrichtung_abschluss_2_374</stream_name>
+        </field>
+        <field>
+          <column_name>ausbildung_3_375</column_name>
+          <stream_name>ausbildung_3_375</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_ausbildung_3_376</column_name>
+          <stream_name>zeit_ort_ausbildung_3_376</stream_name>
+        </field>
+        <field>
+          <column_name>einrichtung_abschluss_3_377</column_name>
+          <stream_name>einrichtung_abschluss_3_377</stream_name>
+        </field>
+        <field>
+          <column_name>weitere_erfahrungen_378</column_name>
+          <stream_name>weitere_erfahrungen_378</stream_name>
+        </field>
+        <field>
+          <column_name>erlernter_beruf_379</column_name>
+          <stream_name>erlernter_beruf_379</stream_name>
+        </field>
+        <field>
+          <column_name>aktueller_arbeitgeber_380</column_name>
+          <stream_name>aktueller_arbeitgeber_380</stream_name>
+        </field>
+        <field>
+          <column_name>aufgabenbereich_381</column_name>
+          <stream_name>aufgabenbereich_381</stream_name>
+        </field>
+        <field>
+          <column_name>berufserfahrung_1_382</column_name>
+          <stream_name>berufserfahrung_1_382</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_berufserfahrung_1_383</column_name>
+          <stream_name>zeit_ort_berufserfahrung_1_383</stream_name>
+        </field>
+        <field>
+          <column_name>beschreibung_berufserfahrung_1_384</column_name>
+          <stream_name>beschreibung_berufserfahrung_1_384</stream_name>
+        </field>
+        <field>
+          <column_name>berufserfahrung_2_385</column_name>
+          <stream_name>berufserfahrung_2_385</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_berufserfahrung_2_386</column_name>
+          <stream_name>zeit_ort_berufserfahrung_2_386</stream_name>
+        </field>
+        <field>
+          <column_name>beschreibung_berufserfahrung_2_387</column_name>
+          <stream_name>beschreibung_berufserfahrung_2_387</stream_name>
+        </field>
+        <field>
+          <column_name>berufserfahrung_3_388</column_name>
+          <stream_name>berufserfahrung_3_388</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_berufserfahrung_3_389</column_name>
+          <stream_name>zeit_ort_berufserfahrung_3_389</stream_name>
+        </field>
+        <field>
+          <column_name>beschreibung_berufserfahrung_3_390</column_name>
+          <stream_name>beschreibung_berufserfahrung_3_390</stream_name>
+        </field>
+        <field>
+          <column_name>ehrenamt_1_391</column_name>
+          <stream_name>ehrenamt_1_391</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_ehrenamt_1_392</column_name>
+          <stream_name>zeit_ort_ehrenamt_1_392</stream_name>
+        </field>
+        <field>
+          <column_name>beschreibung_ehrenamt_1_393</column_name>
+          <stream_name>beschreibung_ehrenamt_1_393</stream_name>
+        </field>
+        <field>
+          <column_name>ehrenamt_2_394</column_name>
+          <stream_name>ehrenamt_2_394</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_ehrenamt_2_395</column_name>
+          <stream_name>zeit_ort_ehrenamt_2_395</stream_name>
+        </field>
+        <field>
+          <column_name>beschreibung_ehrenamt_2_396</column_name>
+          <stream_name>beschreibung_ehrenamt_2_396</stream_name>
+        </field>
+        <field>
+          <column_name>ehrenamt_3_397</column_name>
+          <stream_name>ehrenamt_3_397</stream_name>
+        </field>
+        <field>
+          <column_name>zeit_ort_ehrenamt_3_398</column_name>
+          <stream_name>zeit_ort_ehrenamt_3_398</stream_name>
+        </field>
+        <field>
+          <column_name>beschreibung_ehrenamt_3_399</column_name>
+          <stream_name>beschreibung_ehrenamt_3_399</stream_name>
+        </field>
+        <field>
+          <column_name>erfahrungen_inwiefern_relevant_400</column_name>
+          <stream_name>erfahrungen_inwiefern_relevant_400</stream_name>
+        </field>
+        <field>
+          <column_name>dauer_arbeit_krisengebiete_401</column_name>
+          <stream_name>dauer_arbeit_krisengebiete_401</stream_name>
+        </field>
+        <field>
+          <column_name>muttersprache_402</column_name>
+          <stream_name>muttersprache_402</stream_name>
+        </field>
+        <field>
+          <column_name>zweite_muttersprache_403</column_name>
+          <stream_name>zweite_muttersprache_403</stream_name>
+        </field>
+        <field>
+          <column_name>erste_fremdsprache_404</column_name>
+          <stream_name>erste_fremdsprache_404</stream_name>
+        </field>
+        <field>
+          <column_name>erste_fremdsprache_sprachlevel_s_405</column_name>
+          <stream_name>erste_fremdsprache_sprachlevel_s_405</stream_name>
+        </field>
+        <field>
+          <column_name>erste_fremdsprache_sprachlevel_m_406</column_name>
+          <stream_name>erste_fremdsprache_sprachlevel_m_406</stream_name>
+        </field>
+        <field>
+          <column_name>zweite_fremdsprache_407</column_name>
+          <stream_name>zweite_fremdsprache_407</stream_name>
+        </field>
+        <field>
+          <column_name>zweite_fremdsprache_sprachlevel__408</column_name>
+          <stream_name>zweite_fremdsprache_sprachlevel__408</stream_name>
+        </field>
+        <field>
+          <column_name>zweite_fremdsprache_sprachlevel__409</column_name>
+          <stream_name>zweite_fremdsprache_sprachlevel__409</stream_name>
+        </field>
+        <field>
+          <column_name>dritte_fremdsprache_410</column_name>
+          <stream_name>dritte_fremdsprache_410</stream_name>
+        </field>
+        <field>
+          <column_name>dritte_fremdsprache_sprachlevel__411</column_name>
+          <stream_name>dritte_fremdsprache_sprachlevel__411</stream_name>
+        </field>
+        <field>
+          <column_name>dritte_fremdsprache_sprachlevel__412</column_name>
+          <stream_name>dritte_fremdsprache_sprachlevel__412</stream_name>
+        </field>
+        <field>
+          <column_name>vierte_fremdsprache_413</column_name>
+          <stream_name>vierte_fremdsprache_413</stream_name>
+        </field>
+        <field>
+          <column_name>vierte_fremdsprache_sprachlevel__414</column_name>
+          <stream_name>vierte_fremdsprache_sprachlevel__414</stream_name>
+        </field>
+        <field>
+          <column_name>vierte_fremdsprache_sprachlevel__415</column_name>
+          <stream_name>vierte_fremdsprache_sprachlevel__415</stream_name>
+        </field>
+        <field>
+          <column_name>bewerbung_nur_grundlagenkurs_416</column_name>
+          <stream_name>bewerbung_nur_grundlagenkurs_416</stream_name>
+        </field>
+        <field>
+          <column_name>motivation_417</column_name>
+          <stream_name>motivation_417</stream_name>
+        </field>
+        <field>
+          <column_name>andere_auslandsaufenthalte_418</column_name>
+          <stream_name>andere_auslandsaufenthalte_418</stream_name>
+        </field>
+        <field>
+          <column_name>im_auftrag_von_organisation_419</column_name>
+          <stream_name>im_auftrag_von_organisation_419</stream_name>
+        </field>
+        <field>
+          <column_name>welche_organisation_420</column_name>
+          <stream_name>welche_organisation_420</stream_name>
+        </field>
+        <field>
+          <column_name>andere_erfahrungen_421</column_name>
+          <stream_name>andere_erfahrungen_421</stream_name>
+        </field>
+        <field>
+          <column_name>teilnahme_orientierungstag_422</column_name>
+          <stream_name>teilnahme_orientierungstag_422</stream_name>
+        </field>
+        <field>
+          <column_name>welcher_orientierungstag_423</column_name>
+          <stream_name>welcher_orientierungstag_423</stream_name>
+        </field>
+        <field>
+          <column_name>kursfinanzierung_424</column_name>
+          <stream_name>kursfinanzierung_424</stream_name>
+        </field>
+        <field>
+          <column_name>berufsperspektiven_425</column_name>
+          <stream_name>berufsperspektiven_425</stream_name>
+        </field>
+        <field>
+          <column_name>sonstige_bemerkungen_426</column_name>
+          <stream_name>sonstige_bemerkungen_426</stream_name>
+        </field>
+        <field>
+          <column_name>wie_von_angebot_erfahren_427</column_name>
+          <stream_name>wie_von_angebot_erfahren_427</stream_name>
+        </field>
+        <field>
+          <column_name>familienstand_428</column_name>
+          <stream_name>familienstand_428</stream_name>
+        </field>
+        <field>
+          <column_name>zahl_kinder_429</column_name>
+          <stream_name>zahl_kinder_429</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>816</xloc>
-      <yloc>48</yloc>
+      <xloc>288</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

@@ -80,7 +80,7 @@
     <server>localhost</server>
     <type>MYSQL</type>
     <access>Native</access>
-    <database>intern_civicrm_42</database>
+    <database>intern42_civicrm42</database>
     <port>3306</port>
     <username>root</username>
     <password>Encrypted 2be98afc86aa7f2e4a600bd61d296addb</password>
@@ -363,7 +363,7 @@
         </field>
         <field>
           <column_name>contact_id</column_name>
-          <stream_name>new_contact_id</stream_name>
+          <stream_name>contact_id</stream_name>
         </field>
         <field>
           <column_name>modified_date</column_name>

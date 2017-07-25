@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>EntityTag</name>
+    <name>ValueZusatzinfosVeranstaltungen44</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,211 +130,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Source EntityTag</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Tag</from><to>Filter new tag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new tag</from><to>Error Entity Tag No Tag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new tag</from><to>Migrate EntityTag</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Contact ID</from><to>Find new Tag</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Fields</from><to>Write</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>no_tag</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>No new tag found</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error Entity Tag No Tag</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>entity_tag_migration_error</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_entity_tag_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_contact_id</column_name>
-          <stream_name>entity_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>no_tag</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter new tag</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Error Entity Tag No Tag</send_true_to>
-<send_false_to>Migrate EntityTag</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_tag_id</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Contact ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>entity_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_contact_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Tag</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_tag</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>name</name>
-        <field>name</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>id</name>
-        <rename>new_tag_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>512</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Source EntityTag</name>
+    <name>Get Source Fields</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -345,7 +144,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT et.&#x2a;, tag.name&#xa;FROM civicrm_entity_tag et&#xa;LEFT JOIN civicrm_tag tag ON et.tag_id &#x3d; tag.id&#xa;LEFT JOIN civicrm_contact cc ON et.entity_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND et.entity_table &#x3d; &#x27;civicrm_contact&#x27;</sql>
+    <sql>SELECT&#xa;  id&#xa;, entity_id&#xa;, veranstaltungssprache_303&#xa;, dozent_in_311&#xa;, org_ap_312&#xa;, inhalt_ap_313&#xa;, bewerbungsschluss_325&#xa;, tagungsort_326&#xa;, preis_449&#xa;, fr_hbucherpreis_450&#xa;, zusatzkosten_bernachtung_451&#xa;FROM civicrm_value_zusatzinfos_veranstaltungen_44&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -354,13 +153,13 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>80</xloc>
-      <yloc>48</yloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Migrate EntityTag</name>
+    <name>Write</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -372,7 +171,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_entity_tag</table>
+    <table>forumzfd_value_zusatzinfos_veranstaltungen_44</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -393,22 +192,50 @@
           <stream_name>id</stream_name>
         </field>
         <field>
-          <column_name>entity_table</column_name>
-          <stream_name>entity_table</stream_name>
-        </field>
-        <field>
           <column_name>entity_id</column_name>
           <stream_name>entity_id</stream_name>
         </field>
         <field>
-          <column_name>tag_id</column_name>
-          <stream_name>new_tag_id</stream_name>
+          <column_name>veranstaltungssprache_303</column_name>
+          <stream_name>veranstaltungssprache_303</stream_name>
+        </field>
+        <field>
+          <column_name>dozent_in_311</column_name>
+          <stream_name>dozent_in_311</stream_name>
+        </field>
+        <field>
+          <column_name>org_ap_312</column_name>
+          <stream_name>org_ap_312</stream_name>
+        </field>
+        <field>
+          <column_name>inhalt_ap_313</column_name>
+          <stream_name>inhalt_ap_313</stream_name>
+        </field>
+        <field>
+          <column_name>bewerbungsschluss_325</column_name>
+          <stream_name>bewerbungsschluss_325</stream_name>
+        </field>
+        <field>
+          <column_name>tagungsort_326</column_name>
+          <stream_name>tagungsort_326</stream_name>
+        </field>
+        <field>
+          <column_name>preis_449</column_name>
+          <stream_name>preis_449</stream_name>
+        </field>
+        <field>
+          <column_name>fr_hbucherpreis_450</column_name>
+          <stream_name>fr_hbucherpreis_450</stream_name>
+        </field>
+        <field>
+          <column_name>zusatzkosten_bernachtung_451</column_name>
+          <stream_name>zusatzkosten_bernachtung_451</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>816</xloc>
-      <yloc>48</yloc>
+      <xloc>288</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
