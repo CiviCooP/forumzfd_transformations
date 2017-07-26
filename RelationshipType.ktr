@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>GroupContact</name>
+    <name>RelationshipType</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,12 +130,94 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Source Group Contact</from><to>Lookup Migrate  Group</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Migrate  Group</from><to>Filter Group Exists in Target</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter Group Exists in Target</from><to>Write GroupContact</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Rel Types</from><to>Find Target Rel</to><enabled>Y</enabled> </hop>
+  <hop> <from>Find Target Rel</from><to>Filter Not Found in Target</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter Not Found in Target</from><to>Add Rel Type to Target</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Filter Group Exists in Target</name>
+    <name>Add Rel Type to Target</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ForumZFD Target</connection>
+    <schema/>
+    <table>civicrm_relationship_type</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>name_a_b</column_name>
+          <stream_name>name_a_b</stream_name>
+        </field>
+        <field>
+          <column_name>label_a_b</column_name>
+          <stream_name>label_a_b</stream_name>
+        </field>
+        <field>
+          <column_name>name_b_a</column_name>
+          <stream_name>name_b_a</stream_name>
+        </field>
+        <field>
+          <column_name>label_b_a</column_name>
+          <stream_name>label_b_a</stream_name>
+        </field>
+        <field>
+          <column_name>description</column_name>
+          <stream_name>description</stream_name>
+        </field>
+        <field>
+          <column_name>contact_type_a</column_name>
+          <stream_name>contact_type_a</stream_name>
+        </field>
+        <field>
+          <column_name>contact_type_b</column_name>
+          <stream_name>contact_type_b</stream_name>
+        </field>
+        <field>
+          <column_name>contact_sub_type_a</column_name>
+          <stream_name>contact_sub_type_a</stream_name>
+        </field>
+        <field>
+          <column_name>contact_sub_type_b</column_name>
+          <stream_name>contact_sub_type_b</stream_name>
+        </field>
+        <field>
+          <column_name>is_reserved</column_name>
+          <stream_name>is_reserved</stream_name>
+        </field>
+        <field>
+          <column_name>is_active</column_name>
+          <stream_name>is_active</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>656</xloc>
+      <yloc>16</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Filter Not Found in Target</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -145,52 +227,26 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Write GroupContact</send_true_to>
+<send_true_to>Add Rel Type to Target</send_true_to>
 <send_false_to/>
     <compare>
 <condition>
  <negated>N</negated>
- <leftvalue>target_group_id</leftvalue>
- <function>&#x3c;&#x3e;</function>
+ <leftvalue>target_id</leftvalue>
+ <function>&#x3d;</function>
  <rightvalue/>
  <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>32</yloc>
+      <xloc>448</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Get Source Group Contact</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Source</connection>
-    <sql>SELECT&#xa;  gc.id&#xa;, gc.group_id&#xa;, gc.contact_id&#xa;, gc.status&#xa;, gc.location_id&#xa;, gc.email_id&#xa;FROM civicrm_group_contact gc&#xa;JOIN civicrm_contact cc ON gc.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>80</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Migrate  Group</name>
+    <name>Find Target Rel</name>
     <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -206,34 +262,34 @@
     <cache_size>0</cache_size>
     <lookup>
       <schema/>
-      <table>forumzfd_group</table>
+      <table>civicrm_relationship_type</table>
       <orderby/>
       <fail_on_multiple>N</fail_on_multiple>
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
-        <name>group_id</name>
+        <name>id</name>
         <field>id</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
       <value>
         <name>id</name>
-        <rename>target_group_id</rename>
+        <rename>target_id</rename>
         <default>0</default>
         <type>Integer</type>
       </value>
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>256</xloc>
-      <yloc>32</yloc>
+      <xloc>288</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Write GroupContact</name>
-    <type>TableOutput</type>
+    <name>Get Source Rel Types</name>
+    <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -242,53 +298,17 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>forumzfd_group_contact</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>group_id</column_name>
-          <stream_name>group_id</stream_name>
-        </field>
-        <field>
-          <column_name>contact_id</column_name>
-          <stream_name>contact_id</stream_name>
-        </field>
-        <field>
-          <column_name>status</column_name>
-          <stream_name>status</stream_name>
-        </field>
-        <field>
-          <column_name>location_id</column_name>
-          <stream_name>location_id</stream_name>
-        </field>
-        <field>
-          <column_name>email_id</column_name>
-          <stream_name>email_id</stream_name>
-        </field>
-    </fields>
+    <connection>ForumZFD Source</connection>
+    <sql>SELECT&#xa;&#x2a;&#xa;FROM civicrm_relationship_type&#xa;WHERE is_active &#x3d; 1</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>736</xloc>
-      <yloc>32</yloc>
+      <xloc>80</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

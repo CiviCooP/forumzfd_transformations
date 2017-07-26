@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>GroupContact</name>
+    <name>Relationship</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -130,41 +130,12 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Source Group Contact</from><to>Lookup Migrate  Group</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Migrate  Group</from><to>Filter Group Exists in Target</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter Group Exists in Target</from><to>Write GroupContact</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Source Relationship</from><to>Get source relationship type names</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get source relationship type names</from><to>Get target relationship type id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get target relationship type id</from><to>Write relationship</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Filter Group Exists in Target</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Write GroupContact</send_true_to>
-<send_false_to/>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>target_group_id</leftvalue>
- <function>&#x3c;&#x3e;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Source Group Contact</name>
+    <name>Get Source Relationship</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -175,7 +146,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT&#xa;  gc.id&#xa;, gc.group_id&#xa;, gc.contact_id&#xa;, gc.status&#xa;, gc.location_id&#xa;, gc.email_id&#xa;FROM civicrm_group_contact gc&#xa;JOIN civicrm_contact cc ON gc.contact_id &#x3d; cc.id&#xa;WHERE cc.is_deleted &#x3d; 0&#xa;</sql>
+    <sql>SELECT&#xa;  id&#xa;, contact_id_a&#xa;, contact_id_b&#xa;, relationship_type_id&#xa;, start_date&#xa;, end_date&#xa;, is_active&#xa;, description&#xa;, is_permission_a_b&#xa;, is_permission_b_a&#xa;, case_id&#xa;FROM civicrm_relationship&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -190,7 +161,55 @@
     </step>
 
   <step>
-    <name>Lookup Migrate  Group</name>
+    <name>Get source relationship type names</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ForumZFD Source</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>civicrm_relationship_type</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>relationship_type_id</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>name_a_b</name>
+        <rename>source_name_a_b</rename>
+        <default/>
+        <type>String</type>
+      </value>
+      <value>
+        <name>name_b_a</name>
+        <rename>source_name_b_a</rename>
+        <default/>
+        <type>String</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>288</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get target relationship type id</name>
     <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -206,33 +225,39 @@
     <cache_size>0</cache_size>
     <lookup>
       <schema/>
-      <table>forumzfd_group</table>
+      <table>civicrm_relationship_type</table>
       <orderby/>
       <fail_on_multiple>N</fail_on_multiple>
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
-        <name>group_id</name>
-        <field>id</field>
+        <name>source_name_a_b</name>
+        <field>name_a_b</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>source_name_b_a</name>
+        <field>name_b_a</field>
         <condition>&#x3d;</condition>
         <name2/>
       </key>
       <value>
         <name>id</name>
-        <rename>target_group_id</rename>
+        <rename>target_relationship_type_id</rename>
         <default>0</default>
         <type>Integer</type>
       </value>
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>256</xloc>
+      <xloc>544</xloc>
       <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Write GroupContact</name>
+    <name>Write relationship</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -244,7 +269,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_group_contact</table>
+    <table>forumzfd_relationship</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -265,29 +290,53 @@
           <stream_name>id</stream_name>
         </field>
         <field>
-          <column_name>group_id</column_name>
-          <stream_name>group_id</stream_name>
+          <column_name>contact_id_a</column_name>
+          <stream_name>contact_id_a</stream_name>
         </field>
         <field>
-          <column_name>contact_id</column_name>
-          <stream_name>contact_id</stream_name>
+          <column_name>contact_id_b</column_name>
+          <stream_name>contact_id_b</stream_name>
         </field>
         <field>
-          <column_name>status</column_name>
-          <stream_name>status</stream_name>
+          <column_name>relationship_type_id</column_name>
+          <stream_name>relationship_type_id</stream_name>
         </field>
         <field>
-          <column_name>location_id</column_name>
-          <stream_name>location_id</stream_name>
+          <column_name>start_date</column_name>
+          <stream_name>start_date</stream_name>
         </field>
         <field>
-          <column_name>email_id</column_name>
-          <stream_name>email_id</stream_name>
+          <column_name>end_date</column_name>
+          <stream_name>end_date</stream_name>
+        </field>
+        <field>
+          <column_name>is_active</column_name>
+          <stream_name>is_active</stream_name>
+        </field>
+        <field>
+          <column_name>description</column_name>
+          <stream_name>description</stream_name>
+        </field>
+        <field>
+          <column_name>is_permission_a_b</column_name>
+          <stream_name>is_permission_a_b</stream_name>
+        </field>
+        <field>
+          <column_name>is_permission_b_a</column_name>
+          <stream_name>is_permission_b_a</stream_name>
+        </field>
+        <field>
+          <column_name>case_id</column_name>
+          <stream_name>case_id</stream_name>
+        </field>
+        <field>
+          <column_name>new_relationship_type_id</column_name>
+          <stream_name>target_relationship_type_id</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>736</xloc>
+      <xloc>784</xloc>
       <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>

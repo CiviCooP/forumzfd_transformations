@@ -80,7 +80,7 @@
     <server>localhost</server>
     <type>MYSQL</type>
     <access>Native</access>
-    <database>intern_civicrm_42</database>
+    <database>intern42_civicrm42</database>
     <port>3306</port>
     <username>root</username>
     <password>Encrypted 2be98afc86aa7f2e4a600bd61d296addb</password>
@@ -130,36 +130,13 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Add Act Source</from><to>Lookup Target Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>If Assignee</from><to>Lookup Assignee New ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>If Assignee</from><to>Assignee 0</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Assignee Contacts</from><to>If Assignee</to><enabled>Y</enabled> </hop>
-  <hop> <from>Assignee 0</from><to>Lookup Source Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add Act Assignee</from><to>Lookup Source Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Source Contacts</from><to>If Source</to><enabled>Y</enabled> </hop>
-  <hop> <from>If Source</from><to>Lookup Source New ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>If Source</from><to>Source 0</to><enabled>Y</enabled> </hop>
-  <hop> <from>Source 0</from><to>Lookup Target Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Target Contacts</from><to>If Target</to><enabled>Y</enabled> </hop>
-  <hop> <from>If Target</from><to>Lookup Target New ID</to><enabled>Y</enabled> </hop>
   <hop> <from>Get Activities From Source</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Old Act Type Name</to><enabled>Y</enabled> </hop>
-  <hop> <from>Old Act Type Name</from><to>New Act Type ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Insert &#x2f; Update Activity</from><to>Lookup Assignee Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Assignee New ID</from><to>If New Assignee</to><enabled>Y</enabled> </hop>
-  <hop> <from>If New Assignee</from><to>Add Act Assignee</to><enabled>Y</enabled> </hop>
-  <hop> <from>If New Assignee</from><to>Lookup Source Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Source New ID</from><to>If New Source</to><enabled>Y</enabled> </hop>
-  <hop> <from>If New Source</from><to>Add Act Source</to><enabled>Y</enabled> </hop>
-  <hop> <from>If New Source</from><to>Lookup Target Contacts</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Target New ID</from><to>If New Target</to><enabled>Y</enabled> </hop>
-  <hop> <from>If New Target</from><to>Add Act Target</to><enabled>Y</enabled> </hop>
-  <hop> <from>New Act Type ID</from><to>Filter Activity Type</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter Activity Type</from><to>Insert &#x2f; Update Activity</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter Activity Type</from><to>Error on Type</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants</from><to>Lookup Activity Type Name</to><enabled>Y</enabled> </hop>
+  <hop> <from>Lookup Activity Type Name</from><to>Ignore Contribution and Event Registration</to><enabled>Y</enabled> </hop>
+  <hop> <from>Ignore Contribution and Event Registration</from><to>Add Activity</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Add Act Assignee</name>
+    <name>Add Activity</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -171,9 +148,9 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>forumzfd_activity_contact</table>
+    <table>forumzfd_activity</table>
     <commit>1000</commit>
-    <truncate>N</truncate>
+    <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <specify_fields>Y</specify_fields>
@@ -188,122 +165,110 @@
     <return_field/>
     <fields>
         <field>
-          <column_name>activity_id</column_name>
-          <stream_name>id</stream_name>
+          <column_name>id</column_name>
+          <stream_name>activity_id</stream_name>
         </field>
         <field>
-          <column_name>contact_id</column_name>
-          <stream_name>new_assignee_id</stream_name>
+          <column_name>source_record_id</column_name>
+          <stream_name>source_record_id</stream_name>
         </field>
         <field>
-          <column_name>record_type_id</column_name>
-          <stream_name>assignee_type_id</stream_name>
+          <column_name>activity_type_id</column_name>
+          <stream_name>activity_type_id</stream_name>
+        </field>
+        <field>
+          <column_name>subject</column_name>
+          <stream_name>subject</stream_name>
+        </field>
+        <field>
+          <column_name>activity_date_time</column_name>
+          <stream_name>activity_date_time</stream_name>
+        </field>
+        <field>
+          <column_name>duration</column_name>
+          <stream_name>duration</stream_name>
+        </field>
+        <field>
+          <column_name>location</column_name>
+          <stream_name>location</stream_name>
+        </field>
+        <field>
+          <column_name>phone_id</column_name>
+          <stream_name>phone_id</stream_name>
+        </field>
+        <field>
+          <column_name>phone_number</column_name>
+          <stream_name>phone_number</stream_name>
+        </field>
+        <field>
+          <column_name>details</column_name>
+          <stream_name>details</stream_name>
+        </field>
+        <field>
+          <column_name>status_id</column_name>
+          <stream_name>status_id</stream_name>
+        </field>
+        <field>
+          <column_name>priority_id</column_name>
+          <stream_name>priority_id</stream_name>
+        </field>
+        <field>
+          <column_name>parent_id</column_name>
+          <stream_name>parent_id</stream_name>
+        </field>
+        <field>
+          <column_name>is_test</column_name>
+          <stream_name>is_test</stream_name>
+        </field>
+        <field>
+          <column_name>medium_id</column_name>
+          <stream_name>medium_id</stream_name>
+        </field>
+        <field>
+          <column_name>relationship_id</column_name>
+          <stream_name>relationship_id</stream_name>
+        </field>
+        <field>
+          <column_name>is_current_revision</column_name>
+          <stream_name>is_current_revision</stream_name>
+        </field>
+        <field>
+          <column_name>is_auto</column_name>
+          <stream_name>is_auto</stream_name>
+        </field>
+        <field>
+          <column_name>original_id</column_name>
+          <stream_name>original_id</stream_name>
+        </field>
+        <field>
+          <column_name>is_deleted</column_name>
+          <stream_name>is_deleted</stream_name>
+        </field>
+        <field>
+          <column_name>campaign_id</column_name>
+          <stream_name>campaign_id</stream_name>
+        </field>
+        <field>
+          <column_name>engagement_level</column_name>
+          <stream_name>engagement_level</stream_name>
+        </field>
+        <field>
+          <column_name>weight</column_name>
+          <stream_name>weight</stream_name>
+        </field>
+        <field>
+          <column_name>result</column_name>
+          <stream_name>result</stream_name>
+        </field>
+        <field>
+          <column_name>activity_type_name</column_name>
+          <stream_name>activity_type_name</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>704</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Add Act Source</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>forumzfd_activity_contact</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>activity_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>contact_id</column_name>
-          <stream_name>new_source_id</stream_name>
-        </field>
-        <field>
-          <column_name>record_type_id</column_name>
-          <stream_name>source_type_id</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>448</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Add Act Target</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>forumzfd_activity_contact</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>activity_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>contact_id</column_name>
-          <stream_name>new_target_id</stream_name>
-        </field>
-        <field>
-          <column_name>record_type_id</column_name>
-          <stream_name>target_type_id</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>656</yloc>
+      <xloc>448</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -321,61 +286,13 @@
            </partitioning>
     <fields>
       <field>
-        <name>assignee_type_id</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>1</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-      <field>
-        <name>source_type_id</name>
+        <name>act_type_option_group_id</name>
         <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
         <nullif>2</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-      <field>
-        <name>target_type_id</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>3</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-      <field>
-        <name>option_group_id</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>2</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-      <field>
-        <name>error_message</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>Activity type not found, not migrated&#x21;</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
@@ -385,39 +302,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>256</xloc>
       <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Assignee 0</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>new_assignee_id</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>0</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>256</xloc>
-      <yloc>304</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -434,7 +318,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT &#x2a; &#xa;FROM civicrm_activity&#xa;WHERE is_current_revision &#x3d; 1</sql>
+    <sql>SELECT &#xa;DISTINCT&#x28;act.id&#x29; AS activity_id, act.source_record_id, act.activity_type_id, act.subject,&#xa;act.activity_date_time, act.duration, act.location, act.phone_id, act.phone_number, act.details,&#xa;act.status_id, act.priority_id, act.parent_id, act.is_test, act.medium_id, act.relationship_id,&#xa;act.is_current_revision, act.is_auto, act.original_id, act.is_deleted, act.campaign_id, act.engagement_level, act.weight,&#xa;act.result&#xa;&#xa;FROM civicrm_contact cc&#xa;JOIN civicrm_activity_contact ac ON cc.id &#x3d; ac.contact_id&#xa;JOIN civicrm_activity act ON ac.activity_id &#x3d; act.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND act.is_current_revision &#x3d; 1</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -449,7 +333,7 @@
     </step>
 
   <step>
-    <name>If Assignee</name>
+    <name>Ignore Contribution and Event Registration</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -459,636 +343,38 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Lookup Assignee New ID</send_true_to>
-<send_false_to>Assignee 0</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>assignee_contact_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>96</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>If New Assignee</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Add Act Assignee</send_true_to>
-<send_false_to>Lookup Source Contacts</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_assignee_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>400</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>If New Source</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Add Act Source</send_true_to>
-<send_false_to>Lookup Target Contacts</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_source_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>400</xloc>
-      <yloc>448</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>If New Target</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Add Act Target</send_true_to>
+<send_true_to>Add Activity</send_true_to>
 <send_false_to/>
     <compare>
 <condition>
  <negated>N</negated>
- <leftvalue>new_target_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
+ <conditions>
+  <condition>
+   <negated>N</negated>
+   <leftvalue>activity_type_name</leftvalue>
+   <function>&#x3c;&#x3e;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>Contribution</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  <condition>
+   <negated>N</negated>
+   <operator>AND</operator>
+   <leftvalue>activity_type_name</leftvalue>
+   <function>&#x3c;&#x3e;</function>
+   <rightvalue/>
+   <value><name>constant</name><type>String</type><text>Event Registration</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+  </conditions>
  </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>400</xloc>
-      <yloc>656</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>If Source</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Lookup Source New ID</send_true_to>
-<send_false_to>Source 0</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>source_contact_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>96</xloc>
-      <yloc>448</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>If Target</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Lookup Target New ID</send_true_to>
-<send_false_to/>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>target_contact_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>96</xloc>
-      <yloc>656</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Insert &#x2f; Update Activity</name>
-    <type>InsertUpdate</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <commit>100</commit>
-    <update_bypassed>N</update_bypassed>
-    <lookup>
-      <schema/>
-      <table>forumzfd_activity</table>
-      <key>
-        <name>id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>source_record_id</name>
-        <rename>source_record_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>activity_type_id</name>
-        <rename>new_act_type_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>subject</name>
-        <rename>subject</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>activity_date_time</name>
-        <rename>activity_date_time</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>duration</name>
-        <rename>duration</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>location</name>
-        <rename>location</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>phone_id</name>
-        <rename>phone_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>phone_number</name>
-        <rename>phone_number</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>details</name>
-        <rename>details</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>status_id</name>
-        <rename>status_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>priority_id</name>
-        <rename>priority_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>parent_id</name>
-        <rename>parent_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>is_test</name>
-        <rename>is_test</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>medium_id</name>
-        <rename>medium_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>is_auto</name>
-        <rename>is_auto</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>relationship_id</name>
-        <rename>relationship_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>is_current_revision</name>
-        <rename>is_current_revision</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>original_id</name>
-        <rename>original_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>result</name>
-        <rename>result</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>is_deleted</name>
-        <rename>is_deleted</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>campaign_id</name>
-        <rename>campaign_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>engagement_level</name>
-        <rename>engagement_level</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>weight</name>
-        <rename>weight</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>448</xloc>
-      <yloc>112</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Assignee Contacts</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Source</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_activity_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>id</name>
-        <field>activity_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>assignee_type_id</name>
-        <field>record_type_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>contact_id</name>
-        <rename>assignee_contact_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>656</xloc>
+      <xloc>160</xloc>
       <yloc>144</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Lookup Assignee New ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>assignee_contact_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_assignee_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>256</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Source Contacts</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Source</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_activity_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>id</name>
-        <field>activity_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>source_type_id</name>
-        <field>record_type_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>contact_id</name>
-        <rename>source_contact_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>704</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Source New ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>source_contact_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_source_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>240</xloc>
-      <yloc>448</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Target Contacts</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Source</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_activity_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>id</name>
-        <field>activity_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>target_type_id</name>
-        <field>record_type_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>contact_id</name>
-        <rename>target_contact_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>528</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Target New ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>target_contact_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_target_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>240</xloc>
-      <yloc>656</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>New Act Type ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_option_value</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>option_group_id</name>
-        <field>option_group_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>old_act_type_name</name>
-        <field>name</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>value</name>
-        <rename>new_act_type_id</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Old Act Type Name</name>
+    <name>Lookup Activity Type Name</name>
     <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -1109,7 +395,7 @@
       <fail_on_multiple>N</fail_on_multiple>
       <eat_row_on_failure>N</eat_row_on_failure>
       <key>
-        <name>option_group_id</name>
+        <name>act_type_option_group_id</name>
         <field>option_group_id</field>
         <condition>&#x3d;</condition>
         <name2/>
@@ -1122,126 +408,14 @@
       </key>
       <value>
         <name>name</name>
-        <rename>old_act_type_name</rename>
+        <rename>activity_type_name</rename>
         <default/>
         <type>String</type>
       </value>
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>400</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Source 0</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>new_source_id</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>0</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>240</xloc>
-      <yloc>544</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter Activity Type</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Insert &#x2f; Update Activity</send_true_to>
-<send_false_to>Error on Type</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_act_type_id</leftvalue>
- <function>IS NOT NULL</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>704</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error on Type</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>activity_migration_error</table>
-    <commit>1000</commit>
-    <truncate>Y</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_activity_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_activity_type_id</column_name>
-          <stream_name>activity_type_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>error_message</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>864</xloc>
+      <xloc>432</xloc>
       <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
