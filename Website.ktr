@@ -182,7 +182,7 @@
            </partitioning>
     <connection>ForumZFD Target</connection>
     <schema/>
-    <table>website_migration_error</table>
+    <table>forumzfd_website_migration_error</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
