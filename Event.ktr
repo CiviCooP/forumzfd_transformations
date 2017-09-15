@@ -80,7 +80,7 @@
     <server>localhost</server>
     <type>MYSQL</type>
     <access>Native</access>
-    <database>intern_civicrm_42</database>
+    <database>intern42_civicrm42</database>
     <port>3306</port>
     <username>root</username>
     <password>Encrypted 2be98afc86aa7f2e4a600bd61d296addb</password>
@@ -144,7 +144,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT&#xa;  id AS event_id&#xa;, title&#xa;, summary&#xa;, description AS event_description&#xa;, event_type_id&#xa;, participant_listing_id&#xa;, is_public&#xa;, start_date&#xa;, end_date&#xa;, is_online_registration&#xa;, registration_link_text&#xa;, registration_start_date&#xa;, registration_end_date&#xa;, max_participants&#xa;, event_full_text&#xa;, is_monetary&#xa;, financial_type_id&#xa;, payment_processor&#xa;, is_map&#xa;, is_active AS event_is_active&#xa;, fee_label&#xa;, is_show_location&#xa;, loc_block_id&#xa;, default_role_id&#xa;, intro_text&#xa;, footer_text&#xa;, confirm_title&#xa;, confirm_text&#xa;, confirm_footer_text&#xa;, is_email_confirm&#xa;, confirm_email_text&#xa;, confirm_from_name&#xa;, confirm_from_email&#xa;, cc_confirm&#xa;, bcc_confirm&#xa;, default_fee_id&#xa;, default_discount_fee_id&#xa;, thankyou_title&#xa;, thankyou_text&#xa;, thankyou_footer_text&#xa;, is_pay_later&#xa;, pay_later_text&#xa;, pay_later_receipt&#xa;, is_multiple_registrations&#xa;, allow_same_participant_emails&#xa;, has_waitlist&#xa;, requires_approval&#xa;, expiration_time&#xa;, waitlist_text&#xa;, approval_req_text&#xa;, is_template&#xa;, template_title&#xa;, created_id&#xa;, created_date&#xa;, currency&#xa;, campaign_id&#xa;, is_share&#xa;, parent_event_id&#xa;, slot_label_id&#xa;, is_partial_payment&#xa;, min_initial_amount&#xa;, initial_amount_label&#xa;, initial_amount_help_text&#xa;, is_confirm_enabled&#xa;, dedupe_rule_group_id&#xa;, is_billing_required&#xa;FROM civicrm_event&#xa;WHERE title IS NOT NULL&#xa;</sql>
+    <sql>SELECT&#xa;  id&#xa;, title&#xa;, summary&#xa;, description&#xa;, event_type_id&#xa;, participant_listing_id&#xa;, is_public&#xa;, start_date&#xa;, end_date&#xa;, is_online_registration&#xa;, registration_link_text&#xa;, registration_start_date&#xa;, registration_end_date&#xa;, max_participants&#xa;, event_full_text&#xa;, is_monetary&#xa;, financial_type_id&#xa;, payment_processor&#xa;, is_map&#xa;, is_active&#xa;, fee_label&#xa;, is_show_location&#xa;, loc_block_id&#xa;, default_role_id&#xa;, intro_text&#xa;, footer_text&#xa;, confirm_title&#xa;, confirm_text&#xa;, confirm_footer_text&#xa;, is_email_confirm&#xa;, confirm_email_text&#xa;, confirm_from_name&#xa;, confirm_from_email&#xa;, cc_confirm&#xa;, bcc_confirm&#xa;, default_fee_id&#xa;, default_discount_fee_id&#xa;, thankyou_title&#xa;, thankyou_text&#xa;, thankyou_footer_text&#xa;, is_pay_later&#xa;, pay_later_text&#xa;, pay_later_receipt&#xa;, is_multiple_registrations&#xa;, allow_same_participant_emails&#xa;, has_waitlist&#xa;, requires_approval&#xa;, expiration_time&#xa;, waitlist_text&#xa;, approval_req_text&#xa;, is_template&#xa;, template_title&#xa;, created_id&#xa;, created_date&#xa;, currency&#xa;, campaign_id&#xa;, is_share&#xa;, parent_event_id&#xa;, slot_label_id&#xa;, is_partial_payment&#xa;, min_initial_amount&#xa;, initial_amount_label&#xa;, initial_amount_help_text&#xa;, is_confirm_enabled&#xa;, dedupe_rule_group_id&#xa;, is_billing_required&#xa;FROM civicrm_event&#xa;WHERE title IS NOT NULL&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -188,6 +188,10 @@
     <return_field/>
     <fields>
         <field>
+          <column_name>id</column_name>
+          <stream_name>id</stream_name>
+        </field>
+        <field>
           <column_name>title</column_name>
           <stream_name>title</stream_name>
         </field>
@@ -197,7 +201,7 @@
         </field>
         <field>
           <column_name>description</column_name>
-          <stream_name>event_description</stream_name>
+          <stream_name>description</stream_name>
         </field>
         <field>
           <column_name>event_type_id</column_name>
@@ -261,7 +265,7 @@
         </field>
         <field>
           <column_name>is_active</column_name>
-          <stream_name>event_is_active</stream_name>
+          <stream_name>is_active</stream_name>
         </field>
         <field>
           <column_name>fee_label</column_name>
@@ -356,22 +360,6 @@
           <stream_name>pay_later_receipt</stream_name>
         </field>
         <field>
-          <column_name>is_partial_payment</column_name>
-          <stream_name>is_partial_payment</stream_name>
-        </field>
-        <field>
-          <column_name>initial_amount_label</column_name>
-          <stream_name>initial_amount_label</stream_name>
-        </field>
-        <field>
-          <column_name>initial_amount_help_text</column_name>
-          <stream_name>initial_amount_help_text</stream_name>
-        </field>
-        <field>
-          <column_name>min_initial_amount</column_name>
-          <stream_name>min_initial_amount</stream_name>
-        </field>
-        <field>
           <column_name>is_multiple_registrations</column_name>
           <stream_name>is_multiple_registrations</stream_name>
         </field>
@@ -428,16 +416,32 @@
           <stream_name>is_share</stream_name>
         </field>
         <field>
-          <column_name>is_confirm_enabled</column_name>
-          <stream_name>is_confirm_enabled</stream_name>
-        </field>
-        <field>
           <column_name>parent_event_id</column_name>
           <stream_name>parent_event_id</stream_name>
         </field>
         <field>
           <column_name>slot_label_id</column_name>
           <stream_name>slot_label_id</stream_name>
+        </field>
+        <field>
+          <column_name>is_partial_payment</column_name>
+          <stream_name>is_partial_payment</stream_name>
+        </field>
+        <field>
+          <column_name>min_initial_amount</column_name>
+          <stream_name>min_initial_amount</stream_name>
+        </field>
+        <field>
+          <column_name>initial_amount_label</column_name>
+          <stream_name>initial_amount_label</stream_name>
+        </field>
+        <field>
+          <column_name>initial_amount_help_text</column_name>
+          <stream_name>initial_amount_help_text</stream_name>
+        </field>
+        <field>
+          <column_name>is_confirm_enabled</column_name>
+          <stream_name>is_confirm_enabled</stream_name>
         </field>
         <field>
           <column_name>dedupe_rule_group_id</column_name>

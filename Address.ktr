@@ -130,12 +130,9 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Map Location Type</from><to>Find new Contact ID</to><enabled>Y</enabled> </hop>
-  <hop> <from>Find new Contact ID</from><to>Filter new contacts</to><enabled>Y</enabled> </hop>
   <hop> <from>Get Source Address</from><to>Add constants</to><enabled>Y</enabled> </hop>
   <hop> <from>Add constants</from><to>Map Location Type</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Error Address</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter new contacts</from><to>Migrate address</to><enabled>Y</enabled> </hop>
+  <hop> <from>Map Location Type</from><to>Migrate address</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add constants</name>
@@ -165,127 +162,6 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>240</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Error Address</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <schema/>
-    <table>forumzfd_address_migration_error</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>source_address_id</column_name>
-          <stream_name>id</stream_name>
-        </field>
-        <field>
-          <column_name>source_contact_id</column_name>
-          <stream_name>contact_id</stream_name>
-        </field>
-        <field>
-          <column_name>error_message</column_name>
-          <stream_name>error_message</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter new contacts</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Error Address</send_true_to>
-<send_false_to>Migrate address</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>new_contact_id</leftvalue>
- <function>&#x3d;</function>
- <rightvalue/>
- <value><name>constant</name><type>Integer</type><text>0</text><length>-1</length><precision>0</precision><isnull>N</isnull><mask>&#x23;&#x3b;-&#x23;</mask></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Find new Contact ID</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Target</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>forumzfd_contact</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>contact_id</name>
-        <field>id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>new_contact_id</name>
-        <rename>new_contact_id</rename>
-        <default>0</default>
-        <type>Integer</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>576</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>
@@ -517,7 +393,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>880</xloc>
+      <xloc>576</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
       </GUI>

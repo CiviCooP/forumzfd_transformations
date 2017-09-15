@@ -130,10 +130,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get Activities From Source</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Lookup Activity Type Name</to><enabled>Y</enabled> </hop>
-  <hop> <from>Lookup Activity Type Name</from><to>Ignore Contribution and Event Registration</to><enabled>Y</enabled> </hop>
-  <hop> <from>Ignore Contribution and Event Registration</from><to>Add Activity</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Activities From Source</from><to>Add Activity</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add Activity</name>
@@ -166,7 +163,7 @@
     <fields>
         <field>
           <column_name>id</column_name>
-          <stream_name>activity_id</stream_name>
+          <stream_name>id</stream_name>
         </field>
         <field>
           <column_name>source_record_id</column_name>
@@ -267,40 +264,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>448</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Add constants</name>
-    <type>Constant</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>act_type_option_group_id</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>2</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>256</xloc>
+      <xloc>336</xloc>
       <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
@@ -318,7 +282,7 @@
            <schema_name/>
            </partitioning>
     <connection>ForumZFD Source</connection>
-    <sql>SELECT &#xa;DISTINCT&#x28;act.id&#x29; AS activity_id, act.source_record_id, act.activity_type_id, act.subject,&#xa;act.activity_date_time, act.duration, act.location, act.phone_id, act.phone_number, act.details,&#xa;act.status_id, act.priority_id, act.parent_id, act.is_test, act.medium_id, act.relationship_id,&#xa;act.is_current_revision, act.is_auto, act.original_id, act.is_deleted, act.campaign_id, act.engagement_level, act.weight,&#xa;act.result&#xa;&#xa;FROM civicrm_contact cc&#xa;JOIN civicrm_activity_contact ac ON cc.id &#x3d; ac.contact_id&#xa;JOIN civicrm_activity act ON ac.activity_id &#x3d; act.id&#xa;WHERE cc.is_deleted &#x3d; 0 AND act.is_current_revision &#x3d; 1</sql>
+    <sql>SELECT &#xa;DISTINCT&#x28;act.id&#x29;, act.source_record_id, act.activity_type_id, act.subject,&#xa;act.activity_date_time, act.duration, act.location, act.phone_id, act.phone_number, act.details,&#xa;act.status_id, act.priority_id, act.parent_id, act.is_test, act.medium_id, act.relationship_id,&#xa;act.is_current_revision, act.is_auto, act.original_id, act.is_deleted, act.campaign_id, act.engagement_level, act.weight,&#xa;act.result, ov.name as activity_type_name&#xa;&#xa;FROM civicrm_contact cc&#xa;JOIN civicrm_activity_contact ac ON cc.id &#x3d; ac.contact_id&#xa;JOIN civicrm_activity act ON ac.activity_id &#x3d; act.id&#xa;LEFT JOIN civicrm_option_value ov ON act.activity_type_id &#x3d; ov.value AND ov.option_group_id &#x3d; 2&#xa;WHERE cc.is_deleted &#x3d; 0 AND act.is_current_revision &#x3d; 1 AND activity_type_id NOT IN &#x28;5,6&#x29;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -327,95 +291,6 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>96</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Ignore Contribution and Event Registration</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Add Activity</send_true_to>
-<send_false_to/>
-    <compare>
-<condition>
- <negated>N</negated>
- <conditions>
-  <condition>
-   <negated>N</negated>
-   <leftvalue>activity_type_name</leftvalue>
-   <function>&#x3c;&#x3e;</function>
-   <rightvalue/>
-   <value><name>constant</name><type>String</type><text>Contribution</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
-  <condition>
-   <negated>N</negated>
-   <operator>AND</operator>
-   <leftvalue>activity_type_name</leftvalue>
-   <function>&#x3c;&#x3e;</function>
-   <rightvalue/>
-   <value><name>constant</name><type>String</type><text>Event Registration</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
-  </conditions>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>160</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup Activity Type Name</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>ForumZFD Source</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>civicrm_option_value</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>act_type_option_group_id</name>
-        <field>option_group_id</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>activity_type_id</name>
-        <field>value</field>
-        <condition>&#x3d;</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>name</name>
-        <rename>activity_type_name</rename>
-        <default/>
-        <type>String</type>
-      </value>
-    </lookup>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>432</xloc>
       <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
